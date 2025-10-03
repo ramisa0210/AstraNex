@@ -9,7 +9,7 @@
     "dev": "nodemon server.js"
   },
   "engines": {
-    "node": ">=18.17 <25"
+    "node": ">=18.17 <19"
   },
   "dependencies": {
     "cors": "^2.8.5",
