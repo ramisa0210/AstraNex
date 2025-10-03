@@ -1,74 +1,96 @@
 // src/utils/api.js
 import axios from "axios";
 
-// Backend URL (optional, if you have other backend routes)
+// ---------- Backend base URL ----------
+// .env examples:
+//   Local:      VITE_API_BASE=http://localhost:8080
+//   Production: VITE_API_BASE=https://astra-nex-backend.onrender.com
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+
+// Create axios instance for your backend
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: API_BASE, // IMPORTANT: no trailing /api here
+  timeout: 15000,
 });
+
+// Optional client-side NASA key (only used if you really want to call NASA directly from browser)
+const NASA_API_KEY = import.meta.env.VITE_NASA_API_KEY || "";
+const NASA_BASE_URL = "https://api.nasa.gov/neo/rest/v1";
+
+// Helper: is client allowed to hit NASA directly?
+const useClientNASA = Boolean(NASA_API_KEY);
 
 // ==========================
 // Auth Endpoints (if needed)
 // ==========================
 export const loginUser = (email, password) =>
-  API.post("/auth/login", { email, password });
+  API.post("/api/auth/login", { email, password });
 
 export const registerUser = (name, email, password) =>
-  API.post("/auth/register", { name, email, password });
+  API.post("/api/auth/register", { name, email, password });
 
 // ==========================
-// NASA API Endpoints
+// Asteroids & Orbit
 // ==========================
-const NASA_API_KEY = import.meta.env.VITE_NASA_API_KEY;
 
-const NASA_BASE_URL = "https://api.nasa.gov/neo/rest/v1";
-
-// Fetch today's asteroids feed
+// Prefer backend (no CORS). If VITE_NASA_API_KEY exists, allow client fallback.
 export async function fetchTodayAsteroids() {
+  const today = new Date().toISOString().slice(0, 10);
+
   try {
-    const today = new Date().toISOString().split("T")[0];
-    const response = await fetch(
-      `${NASA_BASE_URL}/feed?start_date=${today}&end_date=${today}&api_key=${NASA_API_KEY}`
-    );
-    if (!response.ok) throw new Error("Failed to fetch asteroids feed");
-    const data = await response.json();
-    return data.near_earth_objects[today] || [];
-  } catch (error) {
-    console.error(error);
+    if (useClientNASA) {
+      // Direct NASA (client)
+      const res = await fetch(
+        `${NASA_BASE_URL}/feed?start_date=${today}&end_date=${today}&api_key=${NASA_API_KEY}`
+      );
+      if (!res.ok) throw new Error("NASA feed failed");
+      const data = await res.json();
+      return data?.near_earth_objects?.[today] || [];
+    } else {
+      // Go via backend
+      const { data } = await API.get("/api/asteroids");
+      return data?.near_earth_objects?.[today] || [];
+    }
+  } catch (err) {
+    console.error("fetchTodayAsteroids error:", err);
     return [];
   }
 }
 
-// Fetch details for a specific asteroid by its NASA ID
+// Get detailed orbit/elements
 export async function fetchAsteroidDetails(id) {
   try {
-    const response = await fetch(
-      `${NASA_BASE_URL}/neo/${id}?api_key=${NASA_API_KEY}`
-    );
-    if (!response.ok) throw new Error("Failed to fetch asteroid details");
-    return await response.json();
-  } catch (error) {
-    console.error(error);
+    if (useClientNASA) {
+      // NASA NEO details (different dataset vs sbdb)
+      const res = await fetch(`${NASA_BASE_URL}/neo/${id}?api_key=${NASA_API_KEY}`);
+      if (!res.ok) throw new Error("NASA details failed");
+      return await res.json();
+    } else {
+      // Backend proxy to JPL SBDB
+      const { data } = await API.get(`/api/orbit/${encodeURIComponent(id)}`);
+      return data;
+    }
+  } catch (err) {
+    console.error("fetchAsteroidDetails error:", err);
     return null;
   }
 }
 
-// ==========================
-// Optional: Backend Asteroids routes
-// ==========================
+// If you want to always use backend for these:
 export const getAsteroids = async () => {
   try {
-    const res = await API.get("/asteroids");
-    return res.data;
+    const { data } = await API.get("/api/asteroids");
+    return data;
   } catch (err) {
     console.error("Error fetching asteroids from backend:", err);
-    return [];
+    return null;
   }
 };
 
 export const getAsteroidOrbit = async (id) => {
   try {
-    const res = await API.get(`/orbit/${id}`);
-    return res.data;
+    const { data } = await API.get(`/api/orbit/${encodeURIComponent(id)}`);
+    return data;
   } catch (err) {
     console.error("Error fetching orbit data from backend:", err);
     return null;
