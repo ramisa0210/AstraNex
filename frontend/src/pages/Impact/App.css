@@ -1,0 +1,1053 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #0b0c10;
+    --panel-bg: #1f2833;
+    --text-color: #c5c6c7;
+    --heading-color: #66fcf1;
+    --border-color: #45a29e;
+    --red: #ff4136;
+    --orange: #ff851b;
+    --yellow: #ffdc00;
+    --green: #2ecc40;
+    --blue: #0074d9;
+    --dark-blue: #12223a;
+    --light-blue: #4d8df5;
+    /* Custom Slider Colors */
+    --slider-track-fill: var(--blue); /* New blue color for slider fill */
+    --slider-track-empty: #c5c6c7;
+    --slider-thumb-color: var(--blue);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.asteroid-simulator-container {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Roboto Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main Title Bar */
+.main-title-bar {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: var(--dark-blue);
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.main-title {
+    font-size: 2.2rem;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+
+.simulator-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    flex-grow: 1;
+    gap: 1.5rem; 
+    padding: 1.5rem; 
+}
+
+.panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.panel-header {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--heading-color);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.panel-header::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background-color: var(--heading-color);
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+/* Control Panel */
+.control-panel {
+    justify-content: space-between;
+}
+
+.asteroid-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.asteroid-btn {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.asteroid-btn.active, .asteroid-btn:hover {
+    background: var(--heading-color);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.config-section {
+    margin-bottom: 2rem;
+    flex-grow: 1; 
+}
+
+.slider-group, .select-group {
+    margin-bottom: 1.5rem;
+}
+
+/* --- START: SLIDER STYLES FOR BLUE COLOR --- */
+
+/* Base input range styling */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--panel-bg);
+    border-radius: 5px;
+    outline: none;
+    margin: 10px 0;
+    cursor: pointer;
+    overflow: hidden; /* Important for the fill effect */
+}
+
+/* Webkit (Chrome, Safari) - Thumb */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--slider-thumb-color); /* Blue thumb */
+    cursor: grab;
+    box-shadow: -100vw 0 0 100vw var(--slider-track-fill); /* Blue fill to the left of the thumb */
+    border: none;
+}
+
+/* Mozilla (Firefox) - Thumb */
+input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--slider-thumb-color); /* Blue thumb */
+    cursor: grab;
+    border: none;
+}
+
+/* Firefox - Track Fill (Workaround required in JS/React to apply fill color for Firefox) */
+/* The provided React code sets the slider's value, which implicitly defines the filled track. */
+/* The below is standard for the *empty* track in Firefox, the filled part often needs more complex JS/CSS workarounds. */
+input[type="range"]::-moz-range-progress {
+    background: var(--slider-track-fill); /* Blue fill for Firefox */
+    height: 8px;
+    border-radius: 5px 0 0 5px;
+}
+
+/* Webkit (Chrome, Safari) - Track */
+input[type="range"]::-webkit-slider-runnable-track {
+    background: var(--slider-track-empty); 
+    height: 8px;
+    border-radius: 5px;
+}
+
+/* Mozilla (Firefox) - Track */
+input[type="range"]::-moz-range-track {
+    background: var(--slider-track-empty); 
+    height: 8px;
+    border-radius: 5px;
+}
+
+
+input[type="range"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- END: SLIDER STYLES FOR BLUE COLOR --- */
+
+
+select {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    font-family: 'Roboto Mono', monospace;
+    appearance: none; 
+    /* Placeholder for select arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23c5c6c7%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-5.4H18.4c-6.6%200-13.2%204.6-13.2%2013.2%200%206.6%204.6%2013.2%2013.2%2013.2h255.4c5.2%200%209.6-3.8%2011.6-9.6%200-2.6-.4-5.2-2-7.2z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+}
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.action-buttons {
+    margin-top: auto; 
+}
+
+.action-buttons button {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.run-btn {
+    background-color: var(--red);
+    color: white;
+}
+
+.run-btn:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+.reset-btn {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+.run-btn:hover:enabled {
+    background-color: #e53935;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reset-btn:hover {
+    background-color: #b0b0b0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Simulation View */
+.simulation-view {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    gap: 1rem;
+}
+
+/* ... (Globe and Impact Zone styles remain the same) ... */
+
+/* UNCONFIGURED Overlay for Globe */
+.unconfigured-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--heading-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    z-index: 5;
+}
+
+/* Impact Data Panel */
+.impact-data {
+    display: flex;
+    flex-direction: column;
+}
+
+.no-data-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    margin-top: 2rem;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    flex-grow: 1;
+}
+
+.status-box {
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.status-box.critical { background-color: var(--red); }
+.status-box.high { background-color: var(--orange); }
+.status-box.medium { background-color: var(--yellow); }
+.status-box.low, .status-box.safe, .status-box.success { background-color: var(--green); }
+/* ... (Metrics, Heat Bar, Location Metrics styles remain the same) ... */
+
+/* --- PDF Download Button Style (Re-added) --- */
+.download-pdf-btn {
+    width: 100%;
+    padding: 1.2rem;
+    margin-top: 1.5rem;
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0, 116, 217, 0.4);
+}
+
+.download-pdf-btn .icon {
+    font-size: 1.3rem;
+    margin-right: 0.75rem;
+}
+
+.download-pdf-btn:hover:enabled {
+    background-color: #0066c0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 116, 217, 0.6);
+}
+
+.download-pdf-btn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* ... (All other existing styles from App.css, ensuring they are present) ... */
+
+/* Existing Styles (Copy-pasted for completeness) */
+/* ... (Existing styles for globe, incoming path, impact zones, etc.) ... */
+.simulation-view .panel-header {
+    margin-bottom: 0.5rem;
+}
+
+.simulation-view .sub-header {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.globe-container {
+    position: relative;
+    width: 100%;
+    max-width: 550px; 
+    padding-bottom: 100%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.earth-globe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 80px 15px rgba(0, 116, 217, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.7);
+    background-color: var(--blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.globe-texture {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+    border-radius: 50%;
+    animation: rotate-globe 30s linear infinite;
+    z-index: 1;
+    position: absolute; 
+}
+
+@keyframes rotate-globe {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.incoming-path-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(45deg); 
+    z-index: 2;
+    pointer-events: none; 
+}
+
+.incoming-path {
+    position: absolute;
+    width: 150%; 
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--red));
+    transform: translateX(-50%) rotate(0deg);
+    animation: incoming-path-anim 2s forwards;
+}
+
+.incoming-asteroid {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+    animation: asteroid-move 2s forwards;
+}
+
+@keyframes incoming-path-anim {
+    from { transform: translateX(-150%) rotate(0deg); } 
+    to { transform: translateX(-50%) rotate(0deg); }
+}
+
+@keyframes asteroid-move {
+    from { transform: translate(-250px, -250px); } 
+    to { transform: translate(0px, 0px); } 
+}
+
+
+.deflected-path-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(45deg);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.deflected-path {
+    position: absolute;
+    width: 150%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--green));
+    transform: translateX(-50%) rotate(0deg);
+    animation: deflected-path-anim 2s forwards;
+    animation-delay: 2s;
+}
+
+@keyframes deflected-path-anim {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(50%) rotate(-45deg); }
+}
+
+
+.impact-zones-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    pointer-events: none; 
+}
+
+.impact-zone-animated {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    animation: impact-zone-reveal 1s forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
+
+.ground-zero-zone {
+    width: 10%;
+    height: 10%;
+    background-color: rgba(255, 65, 54, 0.8); 
+    animation-delay: 0s;
+}
+
+.blast-zone {
+    width: 25%;
+    height: 25%;
+    border: 2px solid rgba(255, 133, 27, 0.8); 
+    animation-delay: 0.1s;
+}
+
+.thermal-radius-zone {
+    width: 45%;
+    height: 45%;
+    border: 2px solid rgba(255, 220, 0, 0.8); 
+    animation-delay: 0.2s;
+}
+
+.shockwave-zone {
+    width: 70%;
+    height: 70%;
+    border: 2px solid rgba(0, 116, 217, 0.8); 
+    animation-delay: 0.3s;
+}
+
+.moderate-damage-zone {
+    width: 95%; 
+    height: 95%;
+    border: 2px solid rgba(46, 204, 64, 0.8); 
+    animation-delay: 0.4s;
+}
+
+.tsunami-risk-zone {
+    width: 120%; 
+    height: 120%;
+    border: 3px solid rgba(0, 116, 217, 0.8); 
+    background-color: rgba(0, 116, 217, 0.2);
+    animation-delay: 0.5s;
+}
+
+
+@keyframes impact-zone-reveal {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.zone-label {
+    position: absolute;
+    transform: translateY(-50%); 
+}
+.ground-zero-zone .zone-label { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.blast-zone .zone-label { top: 20%; left: 50%; transform: translate(-50%, -50%); }
+.thermal-radius-zone .zone-label { top: 35%; left: 50%; transform: translate(-50%, -50%); }
+.shockwave-zone .zone-label { top: 55%; left: 50%; transform: translate(-50%, -50%); }
+.moderate-damage-zone .zone-label { top: 75%; left: 50%; transform: translate(-50%, -50%); }
+.tsunami-risk-zone .zone-label { top: 90%; left: 50%; transform: translate(-50%, -50%); }
+
+
+.impact-legend {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.85rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    margin-right: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.moderate-damage-color { background-color: rgba(46, 204, 64, 0.8); } 
+.shockwave-color { background-color: rgba(0, 116, 217, 0.8); } 
+.thermal-radius-color { background-color: rgba(255, 220, 0, 0.8); } 
+.blast-color { background-color: rgba(255, 133, 27, 0.8); } 
+.ground-zero-color { background-color: rgba(255, 65, 54, 0.8); } 
+.tsunami-risk-color { background-color: rgba(0, 116, 217, 0.8); } 
+/* ... (Rest of the CSS styles) ... */
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metric-card {
+    background-color: var(--bg-color);
+    padding: 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.metric-value {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--heading-color);
+    margin-bottom: 0.3rem;
+}
+
+.metric-value .unit {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--text-color);
+    text-transform: uppercase;
+}
+
+.atmospheric-entry-heat {
+    margin-bottom: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.heat-bar-container {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.heat-bar {
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(to right, var(--green) 33%, var(--yellow) 66%, var(--red) 100%);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.heat-label {
+    position: absolute;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--bg-color);
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+.heat-label.safe { left: 5%; }
+.heat-label.heating { left: 45%; }
+.heat-label.breakup { right: 5%; }
+
+.heat-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: rgba(255,255,255,0.3); 
+    border-radius: 5px;
+    transition: width 0.5s ease-out;
+}
+
+.location-specific-metrics {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.location-metric-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+}
+
+.location-metric-item .metric-label {
+    color: var(--heading-color);
+    text-transform: none;
+}
+
+.location-metric-item .metric-value {
+    color: var(--text-color);
+}
+
+.mitigation-options {
+    margin-top: auto; 
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.mitigation-label {
+    font-size: 1.2rem;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+}
+
+.strategy-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.strategy-btn {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.75rem;
+    border-radius: 10px;
+    width: 120px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.strategy-btn.active, .strategy-btn:hover {
+    background: var(--heading-color);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.strategy-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.strategy-name {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+/* Mitigation Modal */
+.mitigation-overlay, .result-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.mitigation-panel {
+    background: var(--panel-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 650px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(70, 200, 255, 0.3);
+}
+
+.mitigation-panel .panel-header {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.strategy-buttons-modal {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.strategy-card {
+    padding: 1.5rem;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+}
+
+.strategy-card.active, .strategy-card:hover {
+    background: var(--heading-color);
+    color: var(--bg-color);
+    border-color: var(--heading-color);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.strategy-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.strategy-name {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.strategy-params {
+    text-align: left;
+    margin: 0 auto 2.5rem auto; 
+    width: 80%;
+    max-width: 400px;
+}
+
+.confirm-btn {
+    background: var(--blue);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+}
+
+.confirm-btn:hover {
+    background: #0066c0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Result Overlay */
+.result-box {
+    background: var(--panel-bg);
+    border-radius: 15px;
+    padding: 3rem;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255, 65, 54, 0.3);
+}
+
+.result-box.success {
+    border: 2px solid var(--green);
+    box-shadow: 0 0 40px rgba(46, 204, 64, 0.5);
+}
+
+.result-box.failure {
+    border: 2px solid var(--red);
+    box-shadow: 0 0 40px rgba(255, 65, 54, 0.5);
+}
+
+.result-header {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.result-box.success .result-header { color: var(--green); }
+.result-box.failure .result-header { color: var(--red); }
+
+.result-metrics {
+    margin-bottom: 2rem;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.close-btn {
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.close-btn:hover {
+    background: var(--text-color);
+    color: var(--bg-color);
+}
+/* Existing styles in App.css should remain above this */
+
+/* --- PROFESSIONAL EVACUATION PANEL STYLES (Matching Image) --- */
+
+.evac-required-panel {
+    border: 2px solid #e53935; /* Primary Red Border */
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #333; /* Dark background for high contrast */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    color: white; /* Ensure readability on dark background */
+}
+
+.evac-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #ff5252; /* Bright Red for alert text */
+    margin-bottom: 5px;
+}
+
+.evac-icon {
+    font-size: 1.4rem;
+    margin-right: 8px;
+    line-height: 1;
+}
+
+.evac-title {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #ff5252; /* Bright Red for the main title */
+}
+
+.evac-separator {
+    height: 1px;
+    background-color: #555;
+    margin: 5px 0 10px 0;
+}
+
+.evac-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.priority-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #ddd; /* Light gray for details */
+}
+
+.priority-label {
+    font-weight: bold;
+    margin-right: 10px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    color: #212121; /* Dark text for contrast on colored blocks */
+    min-width: 70px; /* Ensure alignment */
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    /* For the visual blocks shown in the image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* Make blocks larger */
+    border-radius: 6px;
+}
+
+.red-label {
+    background-color: #e53935; /* Solid Red */
+    color: white; /* White text on red */
+}
+
+.yellow-label {
+    background-color: #ffc107; /* Amber/Gold */
+    color: #212121; /* Dark text on yellow */
+}
+
+.green-label {
+    background-color: #4caf50; /* Solid Green */
+    color: white; /* White text on green */
+}
+
+.priority-details {
+    flex-grow: 1;
+    padding-left: 10px;
+}
+
+/* Optional: To better match the 'Evac Complete' status box */
+.status-box.impact_after_evac {
+    background-color: #ff9800 !important; /* Orange from the image */
+    color: white !important;
+    border: none !important;
+}
+
+
+
+/* If the simulationStatus logic causes the Risk HIGH to set the orange color: */
+.status-box.high {
+    background-color: #ff9800; /* Matching the orange from the image */
+    color: white;
+}
