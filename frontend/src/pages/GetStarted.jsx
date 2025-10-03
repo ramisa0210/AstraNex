@@ -177,7 +177,7 @@ export default function GetStarted() {
       {/* Enhanced Watch our mission video link */}
       <div className="fixed z-30 bottom-6 left-6 md:bottom-8 md:left-8">
         <a 
-          href="https://drive.google.com/drive/folders/1rSM1p_cukJ0EQ0Wpg-YCOLrJ6XFc3ju9" 
+          href="https://youtu.be/oLiF81ebh-c?si=qdNmiZPLpQ3vOIqo" 
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-3 text-white hover:text-white 
