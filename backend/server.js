@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const fetch = require("node-fetch"); // make sure installed: npm i node-fetch
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // Root route
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send("🚀 AstraNex Backend is running!");
 });
 
