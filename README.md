@@ -6,12 +6,6 @@
 - **Frontend:** [https://astranex-frontend-qyrw.onrender.com](https://astranex-frontend-qyrw.onrender.com)  
 - **Backend API:** [https://astra-nex-backend.onrender.com](https://astra-nex-backend.onrender.com)
   
-Backend Endpoints:
-- GET /api/test — https://astra-nex-backend.onrender.com/api/test
-- GET /api/asteroids — https://astra-nex-backend.onrender.com/api/asteroids
-- GET /api/orbit/{id} — e.g., https://astra-nex-backend.onrender.com/api/orbit/433
-- GET /api/stats — https://astra-nex-backend.onrender.com/api/stats
-  
 ---
   
 ## **Introduction**
