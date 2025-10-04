@@ -40,27 +40,32 @@ AstraNex empowers scientists, policymakers, and the public to explore real near-
 1. Visual Studio Code
 2. Render
 3. GitHub
+4. MongoDB Atlas
 
 ---
 
 ## **Technologies**
 
-Frontend: React, Vite, JavaScript, Tailwind CSS (responsive)
+Frontend: React 18, Vite, JavaScript (ES6+), Tailwind CSS, Axios, React Router, Three.js, @react-three/fiber, @react-three/drei, React Leaflet, Chart.js, react-chartjs-2, chartjs-plugin-datalabels, jsPDF, React Icons
 
-Backend: Node.js, Express.js (REST API)
+Backend: Node.js, Express.js (REST API), dotenv, cors, node-fetch, mongoose, bcryptjs, jsonwebtoken, nodemon
 
-Database: MongoDB (hosted or local)
+Database: MongoDB with Mongoose (ODM), hosted on MongoDB Atlas (cloud)
 
-Build & Tooling: npm, ES Modules/CommonJS (as configured in code)
+Build & Tooling: npm, Vite, @vitejs/plugin-react, PostCSS, Autoprefixer, ES Modules (frontend) / CommonJS (backend)
 
 Deployment: Render (Frontend & Backend)
+
+Data & APIs (used): NASA NeoWs (NEO Feed & Lookup), JPL SSD SBDB (Small-Body Database)
+
+---
 
 ## **Screenshot**
 
 
 ![get started](https://github.com/user-attachments/assets/4cdb5b58-0c8b-4f7c-a429-92c886b91fc8)
 ![home](https://github.com/user-attachments/assets/faf88acd-d6a5-4d57-b7eb-1bd8378c3be6)
-![asteoid](https://![ash](https://github.com/user-attachments/assets/79ca43d2-0175-4a5e-b05b-d454985dceed)
+![asteoid](https://github.com/user-attachments/assets/71cb8f9d-d876-4432-bcde-c0472b735c81)
 ![ash](https://github.com/user-attachments/assets/5104171a-9558-4996-af31-07db836c920a)
 ![ai](https://github.com/user-attachments/assets/8a0a1022-3051-4dc1-8cd9-4191cf4ad358)
 ![stat](https://github.com/user-attachments/assets/b187be0f-52fb-4ac3-b9b9-3ec7ef190b4e)
