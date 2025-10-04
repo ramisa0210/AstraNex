@@ -5,7 +5,11 @@
 ## 🚀 Live Demo
 - **Frontend:** [https://astranex-frontend-qyrw.onrender.com](https://astranex-frontend-qyrw.onrender.com)  
 - **Backend API:** [https://astra-nex-backend.onrender.com](https://astra-nex-backend.onrender.com)
-  
+
+Backend Endpoints:
+- GET /api/asteroids — https://astra-nex-backend.onrender.com/api/asteroids
+- GET /api/orbit/{id} — https://astra-nex-backend.onrender.com/api/orbit/433
+
 ---
   
 ## **Introduction**
