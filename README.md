@@ -19,16 +19,6 @@ AstraNex empowers scientists, policymakers, and the public to explore real near-
 
 ---
 
-## **Team EclipseZ**
-
-- **Team Leader:** Nur E Jannat
-- **Researcher:** Aksatul Jasim Najat
-- **Web Developer:** Waziha Jannat
-- **UI/UX Designer:** Safia Tasnim
-- **Video Editor:** Farzana Naser Neha
-
----
-
 ## **Features**
 
 1. Live Asteroid Map
