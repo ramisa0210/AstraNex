@@ -2,7 +2,7 @@
 
 ---
 
-## 🚀 Live Demo
+## Live Demo
 - **Frontend:** [https://astranex-frontend-qyrw.onrender.com](https://astranex-frontend-qyrw.onrender.com)  
 - **Backend API:** [https://astra-nex-backend.onrender.com](https://astra-nex-backend.onrender.com)
 
@@ -133,11 +133,3 @@ In our Statistics feature, the historical impact data forms a crucial knowledge 
 
 Embark on your AstraNex mission today and be part of the defense against asteroid threats.  
 Together, we can transform scientific knowledge into action and protect our planet.
-
----
-
-## **Feedback and Support**
-
-We value your insights.
-If you encounter issues, have suggestions, or want to collaborate, please reach out to Team EclipseZ.  
-Your feedback helps us improve AstraNex and make it a stronger planetary defense tool.
